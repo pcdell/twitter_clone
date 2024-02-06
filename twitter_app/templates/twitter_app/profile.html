@@ -1,0 +1,78 @@
+{% extends 'twitter_app/base.html' %}
+{% block content %}
+{% load static %}
+
+{% if profile %}
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-8">
+                <h1>{{ profile.user.username }}'s Profiles</h1>
+                </br>
+                {% if tweets %}
+                    {% for tweet in tweets %}
+                        <div class="alert alert-secondary" role="alert">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col-1">
+                                        {% if profile.profile_image %}
+                                            <img src="{{ profile.profile_image.url }}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">
+                                        {% else %}
+                                            <img src="{% static 'images/user_icon.png' %}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">	
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-11">
+                                        {{ tweet.body }}
+</br>
+                                        <small class="text-muted">
+                                            {{ tweet.created_at }} By @{{ tweet.user.username }}
+                                        </small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                {% endif %}
+</br>
+            <div class="col-4">
+                {% if profile.profile_image %}
+                    <img class="img-fluid rounded-circle" src="{{ profile.profile_image.url }}">
+                    </br></br>
+                {% endif %}
+                <div class="card text-bg-light mb-3">
+                    <div class="card-header">Follows</div>
+                    <div class="card-body">
+                        {% for following in profile.follows.all %}
+                            <p class="card-text"><a href="{% url 'profile' following.user.id %}">@{{ following }}</a></p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                </br>
+
+                <div class="card text-bg-light mb-3">
+                    <div class="card-header">Followed By</div>
+                    <div class="card-body">
+                        {% for following in profile.followed_by.all %}
+                            <p class="card-text"><a href="{% url 'profile' following.user.id %}">@{{ following }}</a></p>
+                        {% endfor %}
+                    </div>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    {% if profile in user.profile.follows.all %}
+                        <button class="btn btn-outline-danger" name="follow" value="unfollow" type="submit">Unfollow</button>
+                    {% else %}
+                        <button class="btn btn-outline-success" name="follow" value="follow" type="submit">Follow</button>
+                    {% endif %}
+                </form></br>
+                {% if request.user.id == profile.user.id %}
+                    <a href="{% url 'update_user' %}" class="btn btn-outline-secondary">Update Profile</a>
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+{% endif %}
+{% endblock %}

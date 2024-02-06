@@ -1,0 +1,20 @@
+{% extends 'twitter_app/base.html' %}
+{% block content %}
+{% if user.is_authenticated %}
+    <h1> You're already Logged In</h1>
+{% else %}
+    <div class="col-md-6 offset-md-3">
+        <h1>Login</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+            <input type="text" class="form-control" name="username" placeholder="Enter your Username">
+            </div>
+            <div class="mb-3">
+            <input type="password" class="form-control"  name="password" placeholder="Enter your Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endif %}
+{% endblock %}

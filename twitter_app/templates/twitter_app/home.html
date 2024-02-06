@@ -1,5 +1,50 @@
 {% extends 'twitter_app/base.html' %}
-
+{% load static %}
 {% block content %}
-    <h1>Hello world</h1>
+    <h1>Twitter(X)</h1>
+</br>
+<div class="container text-center">
+    <div class="row">
+        <div class="col-8">
+            {% for tweet in tweets %}
+                <div class="alert alert-secondary" role="alert">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-1">
+                                {% if tweet.user.profile.profile_image %}
+                                    <img src="{{ tweet.user.profile.profile_image.url }}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">
+                                {% else %}
+                                    <img src="{% static 'images/user_icon.png' %}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">	
+                                {% endif %}
+		                    </div>
+                            <div class="col-11">
+                                {{ tweet.body }}
+</br>
+                                <small class="text-muted">
+                                    {{ tweet.created_at }} By @{{ tweet.user.username }}
+                                    - {{ tweet.number_of_likes }}Likes - 
+                                    {% if user in tweet.likes.all %}
+                                        <a href="{% url 'tweet_like' tweet.id %}">Unlike</a>
+                                    {% else %}
+                                    <a href="{% url 'tweet_like' tweet.id %}">Like</a>
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="col-4">
+            {% if form %}
+                <form method=POST>
+                    {% csrf_token %}
+                    {{ form.as_p}}
+                    <button type="submit" class="btn btn-secondary">Post</button>
+                </form>
+            {% endif%}
+        </div>
+
+    </div>
+</div>
 {% endblock %}
