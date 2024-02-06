@@ -112,7 +112,22 @@ def tweet_like(request, pk):
             tweet.likes.remove(request.user)
         else:
             tweet.likes.add(request.user)
-        return redirect('home')
+        
+        return redirect(request.META.get("HTTP_REFERER"))
     else:
-        messages.success(request, ("You must me logged in to update your profile"))
+        messages.success(request, ("You must me logged in to like tweets"))
         return redirect('home')
+    
+def delete_tweet(request, pk):
+    if request.user.is_authenticated:
+        tweet = get_object_or_404(Tweet, id=pk)
+        if request.user.username == tweet.user.username:
+            tweet.delete()
+            messages.success(request, ("You delete your tweet"))
+            return redirect(request.META.get("HTTP_REFERER"))
+        else: 
+            messages.success(request, ("This is not your tweet"))
+            return redirect('home')
+    else:
+        messages.success(request, ("You must me logged to continue"))
+        return redirect(request.META.get("HTTP_REFERER"))

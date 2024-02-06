@@ -12,9 +12,9 @@
                         <div class="row">
                             <div class="col-1">
                                 {% if tweet.user.profile.profile_image %}
-                                    <img src="{{ tweet.user.profile.profile_image.url }}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">
+                                    <img src="{{ tweet.user.profile.profile_image.url }}" width=50 height=50 class="img-fluid rounded-circle" alt="{{ profile.user.username }}">
                                 {% else %}
-                                    <img src="{% static 'images/user_icon.png' %}" width=50 height=50 class="rounded-circle" alt="{{ profile.user.username }}">	
+                                    <img src="{% static 'images/user_icon.png' %}" width=50 height=50 class="img-fluid rounded-circle" alt="{{ profile.user.username }}">	
                                 {% endif %}
 		                    </div>
                             <div class="col-11">
@@ -24,9 +24,9 @@
                                     {{ tweet.created_at }} By @{{ tweet.user.username }}
                                     - {{ tweet.number_of_likes }}Likes - 
                                     {% if user in tweet.likes.all %}
-                                        <a href="{% url 'tweet_like' tweet.id %}">Unlike</a>
+                                        <a href="{% url 'tweet_like' tweet.id %}"><i class="fa-solid fa-heart"></i></a>
                                     {% else %}
-                                    <a href="{% url 'tweet_like' tweet.id %}">Like</a>
+                                    <a href="{% url 'tweet_like' tweet.id %}"><i class="fa-regular fa-heart"></i></a>
                                     {% endif %}
                                 </small>
                             </div>
